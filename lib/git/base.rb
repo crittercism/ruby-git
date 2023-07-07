@@ -605,6 +605,14 @@ module Git
       self.lib.revparse(objectish)
     end
 
+    def rev_list(objectish, opts = {})
+      lib.rev_list(objectish, opts)
+    end
+
+    def bundle_create(destination_path, objectish, opts = {})
+      lib.bundle_create(destination_path, objectish, opts)
+    end
+
     def ls_tree(objectish)
       self.lib.ls_tree(objectish)
     end

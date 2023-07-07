@@ -223,6 +223,48 @@ module Git
       command('rev-parse', string)
     end
 
+    def rev_list(objectish, opts = {})
+      arr_opts = []
+
+      %w[max-count tags remotes].each do |option|
+        sym = option.to_sym
+        arr_opts << "--#{option}#{opts[sym] == true ? '' : "=#{sym}"}" if opts[sym]
+      end
+
+      arr_opts << "--max-count=#{opts[:max_count]}" if opts[:max_count]
+      arr_opts << "--max-parents=#{opts[:max_parents]}" if opts[:max_parents]
+      arr_opts << "--skip=#{opts[:skip]}" if opts[:skip]
+      arr_opts << "--since=#{opts[:since]}" if opts[:since]
+      arr_opts << "--after=#{opts[:after]}" if opts[:after]
+      arr_opts << "--until=#{opts[:until]}" if opts[:until]
+      arr_opts << "--before=#{opts[:before]}" if opts[:before]
+      arr_opts << "--author=#{opts[:author]}" if opts[:author]
+      arr_opts << "--committer=#{opts[:committer]}" if opts[:committer]
+
+      command('rev-list', objectish, *arr_opts).split
+    end
+
+    def bundle_create(destination_path, objectish, opts = {})
+      arr_opts = []
+
+      %w[branches tags remotes].each do |option|
+        sym = option.to_sym
+        arr_opts << "--#{option}#{opts[sym] == true ? '' : "=#{sym}"}" if opts[sym]
+      end
+
+      arr_opts << "--max-count=#{opts[:max_count]}" if opts[:max_count]
+      arr_opts << "--max-parents=#{opts[:max_parents]}" if opts[:max_parents]
+      arr_opts << "--skip=#{opts[:skip]}" if opts[:skip]
+      arr_opts << "--since=#{opts[:since]}" if opts[:since]
+      arr_opts << "--after=#{opts[:after]}" if opts[:after]
+      arr_opts << "--until=#{opts[:until]}" if opts[:until]
+      arr_opts << "--before=#{opts[:before]}" if opts[:before]
+      arr_opts << "--author=#{opts[:author]}" if opts[:author]
+      arr_opts << "--committer=#{opts[:committer]}" if opts[:committer]
+
+      command('bundle', 'create', destination_path, objectish, *arr_opts)
+    end
+
     def namerev(string)
       command('name-rev', string).split[1]
     end
